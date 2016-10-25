@@ -2,7 +2,7 @@
 
 namespace Theseus
 {
-    enum SolverType { WallFollower };
+    public enum SolverType { WallFollower };
 
     public static class GraphicalMazeSolverFactory
     {
