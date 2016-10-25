@@ -4,7 +4,7 @@ namespace Theseus
 {
     enum SolverType { WallFollower };
 
-    static class GraphicalMazeSolverFactory
+    public static class GraphicalMazeSolverFactory
     {
 
         public static GraphicalMazeSolver GetSolver(SolverType algorithmType)

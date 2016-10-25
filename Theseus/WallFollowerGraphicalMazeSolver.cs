@@ -2,7 +2,7 @@
 
 namespace Theseus
 {
-    class WallFollowerGraphicalMazeSolver : GraphicalMazeSolver
+    public class WallFollowerGraphicalMazeSolver : GraphicalMazeSolver
     {
         public static WallFollowerGraphicalMazeSolver Create()
         {
