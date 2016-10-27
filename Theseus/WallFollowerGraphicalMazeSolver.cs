@@ -2,7 +2,7 @@
 
 namespace Theseus
 {
-    public class WallFollowerGraphicalMazeSolver : GraphicalMazeSolver
+    public class WallFollowerGraphicalMazeSolver : IGraphicalMazeSolver
     {
         public static WallFollowerGraphicalMazeSolver Create()
         {
@@ -11,13 +11,12 @@ namespace Theseus
 
         private WallFollowerGraphicalMazeSolver()
         {
-            // Private constructor to force use of factory method
         }
 
-        Image GraphicalMazeSolver.GenerateSolution(Image mazeImage, Color startColor, Color finishColor, Color wallColor, Color solutionColor)
+        Image IGraphicalMazeSolver.GenerateSolution(GraphicalMaze maze)
         {
             // TODO
-            return mazeImage;
+            return maze.MazeImage;
         }
     }
 }

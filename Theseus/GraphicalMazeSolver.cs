@@ -2,8 +2,8 @@
 
 namespace Theseus
 {
-    public interface GraphicalMazeSolver
+    public interface IGraphicalMazeSolver
     {
-        Image GenerateSolution(Image mazeImage, Color startColor, Color finishColor, Color wallColor, Color solutionColor);
+        Image GenerateSolution(GraphicalMaze maze);
     }
 }

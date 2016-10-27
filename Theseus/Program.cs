@@ -4,59 +4,76 @@ using System.IO;
 
 namespace Theseus
 {
-    class Program
+    public class Program
     {
-        private static string USAGE = "Usage: theseus.exe sourceImageFile.[bmp/png/jpg] outputImageFile.[bmp/png/jpg]";
-        private static Color startColor = Color.FromName("Red");
-        private static Color finishColor = Color.FromName("Blue");
-        private static Color wallColor = Color.FromName("Black");
-        private static Color solutionColor = Color.FromName("Green");
+        private const string Usage = "Usage: theseus.exe sourceImageFile.[bmp/png/jpg] outputImageFile.[bmp/png/jpg]";
+        private static readonly Color StartColor = Color.FromName("Red");
+        private static readonly Color FinishColor = Color.FromName("Blue");
+        private static readonly Color WallColor = Color.FromName("Black");
+        private static readonly Color SolutionColor = Color.FromName("Green");
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             if (args.Length == 1 && (args[0] == "-h" || args[0] == "--help"))
             {
-                Console.WriteLine(USAGE);
-                exit();
+                Console.WriteLine(Usage);
+                Exit();
             }
 
             // Validate arguments
             if (args.Length != 2)
             {
                 Console.Error.WriteLine("Incorrect number of arguments found.");
-                Console.Error.WriteLine(USAGE);
-                exit();
+                Console.Error.WriteLine(Usage);
+                Exit();
             }
 
             // Process arguments
-            string currentDirectory = Directory.GetCurrentDirectory();
-            string sourceFile = Path.Combine(currentDirectory, args[0]);
-            string outputFile = Path.Combine(currentDirectory, args[1]);
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var sourceFile = Path.Combine(currentDirectory, args[0]);
+            var outputFile = Path.Combine(currentDirectory, args[1]);
 
             // TODO: Validate file formats
 
             // Get source image
-            Image sourceImage;
             try
             {
-                sourceImage = Image.FromFile(sourceFile);
+                var sourceImage = Image.FromFile(sourceFile);
+                var graphicalMaze = GraphicalMaze.Create(sourceImage, WallColor, StartColor, FinishColor,
+                    SolutionColor);
                 // Generate solution image
-                GraphicalMazeSolver graphicalMazeSolver = GraphicalMazeSolverFactory.GetSolver(SolverType.WallFollower);
-                Image solutionImage = graphicalMazeSolver.GenerateSolution(sourceImage, startColor, finishColor, wallColor, solutionColor);
+                var graphicalMazeSolver = GraphicalMazeSolverFactory.GetSolver(SolverType.WallFollower);
+                var solutionImage = graphicalMazeSolver.GenerateSolution(graphicalMaze);
 
                 // Write solution image, creating the directory if necessary
-                Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
-                solutionImage.Save(outputFile);
-            } catch (FileNotFoundException e)
+                var ouputDirectory = Path.GetDirectoryName(outputFile);
+                if (ouputDirectory != null)
+                {
+                    Directory.CreateDirectory(ouputDirectory);
+                    solutionImage.Save(outputFile);
+                }
+                else
+                {
+                    Console.Error.WriteLine("Cannot retrieve directoy information for output file path ("
+                                            + outputFile + ".");
+                    Exit();
+                }
+            }
+            catch (FileNotFoundException)
             {
                 Console.Error.WriteLine("Source image not found (" + sourceFile + ").");
-                exit();
+                Exit();
             }
 
-            exit();
+            // Solution generated successfully
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                Console.WriteLine("Solution generated and saved (" + outputFile + ".");
+            }
+            Exit();
         }
 
-        private static void exit()
+        private static void Exit()
         {
             // Freeze console output
             if (System.Diagnostics.Debugger.IsAttached)
