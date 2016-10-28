@@ -36,6 +36,31 @@ namespace Theseus
             return null;
         }
 
+        public GraphicalMazePixel? GetPixel(GraphicalMazePixel pixel, Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Top:
+                    return GetPixelTop(pixel);
+                case Direction.TopRight:
+                    return GetPixelTopRight(pixel);
+                case Direction.Right:
+                    return GetPixelRight(pixel);
+                case Direction.BottomRight:
+                    return GetPixelBottomRight(pixel);
+                case Direction.Bottom:
+                    return GetPixelBottom(pixel);
+                case Direction.BottomLeft:
+                    return GetPixelBottomLeft(pixel);
+                case Direction.Left:
+                    return GetPixelLeft(pixel);
+                case Direction.TopLeft:
+                    return GetPixelTopLeft(pixel);
+                default:
+                    return null;
+            }
+        }
+
         public GraphicalMazePixel? GetPixelTop(GraphicalMazePixel pixel)
         {
             return GetPixel(pixel.X, pixel.Y - 1);
