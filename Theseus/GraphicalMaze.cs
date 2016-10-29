@@ -26,7 +26,7 @@ namespace Theseus
 
         public int Width => MazeImage.Width;
 
-        public GraphicalMazePixel? GetPixel(int x, int y)
+        public GraphicalMazePixel GetPixel(int x, int y)
         {
             if (0 <= x && x < MazeImage.Width && 0 <= y && y < MazeImage.Height)
             {
@@ -36,69 +36,74 @@ namespace Theseus
             return null;
         }
 
-        public GraphicalMazePixel? GetPixel(GraphicalMazePixel pixel, Direction direction)
+        public GraphicalMazePixel GetPixel(Point point)
+        {
+            return GetPixel(point.X, point.Y);
+        }
+
+        public GraphicalMazePixel GetPixel(Point point, Direction direction)
         {
             switch (direction)
             {
                 case Direction.Top:
-                    return GetPixelTop(pixel);
+                    return GetPixelTop(point);
                 case Direction.TopRight:
-                    return GetPixelTopRight(pixel);
+                    return GetPixelTopRight(point);
                 case Direction.Right:
-                    return GetPixelRight(pixel);
+                    return GetPixelRight(point);
                 case Direction.BottomRight:
-                    return GetPixelBottomRight(pixel);
+                    return GetPixelBottomRight(point);
                 case Direction.Bottom:
-                    return GetPixelBottom(pixel);
+                    return GetPixelBottom(point);
                 case Direction.BottomLeft:
-                    return GetPixelBottomLeft(pixel);
+                    return GetPixelBottomLeft(point);
                 case Direction.Left:
-                    return GetPixelLeft(pixel);
+                    return GetPixelLeft(point);
                 case Direction.TopLeft:
-                    return GetPixelTopLeft(pixel);
+                    return GetPixelTopLeft(point);
                 default:
                     return null;
             }
         }
 
-        public GraphicalMazePixel? GetPixelTop(GraphicalMazePixel pixel)
+        public GraphicalMazePixel GetPixelTop(Point point)
         {
-            return GetPixel(pixel.X, pixel.Y - 1);
+            return GetPixel(point.X, point.Y - 1);
         }
 
-        public GraphicalMazePixel? GetPixelTopRight(GraphicalMazePixel pixel)
+        public GraphicalMazePixel GetPixelTopRight(Point point)
         {
-            return GetPixel(pixel.X + 1, pixel.Y - 1);
+            return GetPixel(point.X + 1, point.Y - 1);
         }
 
-        public GraphicalMazePixel? GetPixelRight(GraphicalMazePixel pixel)
+        public GraphicalMazePixel GetPixelRight(Point point)
         {
-            return GetPixel(pixel.X + 1, pixel.Y);
+            return GetPixel(point.X + 1, point.Y);
         }
 
-        public GraphicalMazePixel? GetPixelBottomRight(GraphicalMazePixel pixel)
+        public GraphicalMazePixel GetPixelBottomRight(Point point)
         {
-            return GetPixel(pixel.X + 1, pixel.Y + 1);
+            return GetPixel(point.X + 1, point.Y + 1);
         }
 
-        public GraphicalMazePixel? GetPixelBottom(GraphicalMazePixel pixel)
+        public GraphicalMazePixel GetPixelBottom(Point point)
         {
-            return GetPixel(pixel.X, pixel.Y + 1);
+            return GetPixel(point.X, point.Y + 1);
         }
 
-        public GraphicalMazePixel? GetPixelBottomLeft(GraphicalMazePixel pixel)
+        public GraphicalMazePixel GetPixelBottomLeft(Point point)
         {
-            return GetPixel(pixel.X - 1, pixel.Y + 1);
+            return GetPixel(point.X - 1, point.Y + 1);
         }
 
-        public GraphicalMazePixel? GetPixelLeft(GraphicalMazePixel pixel)
+        public GraphicalMazePixel GetPixelLeft(Point point)
         {
-            return GetPixel(pixel.X - 1, pixel.Y);
+            return GetPixel(point.X - 1, point.Y);
         }
 
-        public GraphicalMazePixel? GetPixelTopLeft(GraphicalMazePixel pixel)
+        public GraphicalMazePixel GetPixelTopLeft(Point point)
         {
-            return GetPixel(pixel.X - 1, pixel.Y - 1);
+            return GetPixel(point.X - 1, point.Y - 1);
         }
 
         public void SetPixel(int x, int y, Color color)

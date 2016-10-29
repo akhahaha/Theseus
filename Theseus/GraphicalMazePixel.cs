@@ -1,25 +1,25 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Theseus
 {
-    public struct GraphicalMazePixel
+    public class GraphicalMazePixel : Point
     {
         public static GraphicalMazePixel Create(int x, int y, Color color)
         {
             return new GraphicalMazePixel(x, y, color);
         }
 
-        private GraphicalMazePixel(int x, int y, Color color)
+        protected GraphicalMazePixel(int x, int y, Color color) : base(x, y)
         {
-            X = x;
-            Y = y;
             Color = color;
         }
 
-        public int X { get; }
-
-        public int Y { get; }
-
         public Color Color { get; }
+
+        public bool IsColor(Color color)
+        {
+            return Color.ToArgb() == color.ToArgb();
+        }
     }
 }
