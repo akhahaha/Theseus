@@ -45,22 +45,14 @@ namespace Theseus
         {
             switch (direction)
             {
-                case Direction.Top:
+                case Direction.Up:
                     return GetPixelTop(point);
-                case Direction.TopRight:
-                    return GetPixelTopRight(point);
                 case Direction.Right:
                     return GetPixelRight(point);
-                case Direction.BottomRight:
-                    return GetPixelBottomRight(point);
-                case Direction.Bottom:
+                case Direction.Down:
                     return GetPixelBottom(point);
-                case Direction.BottomLeft:
-                    return GetPixelBottomLeft(point);
                 case Direction.Left:
                     return GetPixelLeft(point);
-                case Direction.TopLeft:
-                    return GetPixelTopLeft(point);
                 default:
                     return null;
             }
@@ -71,19 +63,9 @@ namespace Theseus
             return GetPixel(point.X, point.Y - 1);
         }
 
-        public GraphicalMazePixel GetPixelTopRight(Point point)
-        {
-            return GetPixel(point.X + 1, point.Y - 1);
-        }
-
         public GraphicalMazePixel GetPixelRight(Point point)
         {
             return GetPixel(point.X + 1, point.Y);
-        }
-
-        public GraphicalMazePixel GetPixelBottomRight(Point point)
-        {
-            return GetPixel(point.X + 1, point.Y + 1);
         }
 
         public GraphicalMazePixel GetPixelBottom(Point point)
@@ -91,19 +73,9 @@ namespace Theseus
             return GetPixel(point.X, point.Y + 1);
         }
 
-        public GraphicalMazePixel GetPixelBottomLeft(Point point)
-        {
-            return GetPixel(point.X - 1, point.Y + 1);
-        }
-
         public GraphicalMazePixel GetPixelLeft(Point point)
         {
             return GetPixel(point.X - 1, point.Y);
-        }
-
-        public GraphicalMazePixel GetPixelTopLeft(Point point)
-        {
-            return GetPixel(point.X - 1, point.Y - 1);
         }
 
         public void SetPixel(int x, int y, Color color)

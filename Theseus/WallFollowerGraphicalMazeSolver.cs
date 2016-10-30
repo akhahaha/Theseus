@@ -48,7 +48,7 @@ namespace Theseus
             }
 
             var travelDirection = Direction.Right;
-            var wallDirection = Direction.Top;
+            var wallDirection = Direction.Up;
 
             while (!currPixel.IsColor(maze.FinishColor))
             {
@@ -130,29 +130,21 @@ namespace Theseus
                 // Turn at interior corners
                 switch (wallDirection)
                 {
-                    case Direction.Top:
-                        travelDirection = Direction.Bottom;
+                    case Direction.Up:
+                        travelDirection = Direction.Down;
                         wallDirection = Direction.Right;
                         break;
                     case Direction.Right:
                         travelDirection = Direction.Left;
-                        wallDirection = Direction.Bottom;
+                        wallDirection = Direction.Down;
                         break;
-                    case Direction.Bottom:
-                        travelDirection = Direction.Top;
+                    case Direction.Down:
+                        travelDirection = Direction.Up;
                         wallDirection = Direction.Left;
                         break;
                     case Direction.Left:
                         travelDirection = Direction.Right;
-                        wallDirection = Direction.Top;
-                        break;
-                    case Direction.TopRight:
-                        break;
-                    case Direction.BottomRight:
-                        break;
-                    case Direction.BottomLeft:
-                        break;
-                    case Direction.TopLeft:
+                        wallDirection = Direction.Up;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(wallDirection), wallDirection, null);
@@ -163,41 +155,33 @@ namespace Theseus
             // Wrap-around if moving away from a wall
             switch (travelDirection)
             {
-                case Direction.Top:
+                case Direction.Up:
                     if (!maze.GetPixel(nextPixel, Direction.Left).IsColor(maze.WallColor))
                     {
                         travelDirection = Direction.Left;
-                        wallDirection = Direction.Bottom;
+                        wallDirection = Direction.Down;
                     }
                     break;
                 case Direction.Right:
-                    if (!maze.GetPixel(nextPixel, Direction.Top).IsColor(maze.WallColor))
+                    if (!maze.GetPixel(nextPixel, Direction.Up).IsColor(maze.WallColor))
                     {
-                        travelDirection = Direction.Top;
+                        travelDirection = Direction.Up;
                         wallDirection = Direction.Left;
                     }
                     break;
-                case Direction.Bottom:
+                case Direction.Down:
                     if (!maze.GetPixel(nextPixel, Direction.Right).IsColor(maze.WallColor))
                     {
                         travelDirection = Direction.Right;
-                        wallDirection = Direction.Top;
+                        wallDirection = Direction.Up;
                     }
                     break;
                 case Direction.Left:
-                    if (!maze.GetPixel(nextPixel, Direction.Bottom).IsColor(maze.WallColor))
+                    if (!maze.GetPixel(nextPixel, Direction.Down).IsColor(maze.WallColor))
                     {
-                        travelDirection = Direction.Bottom;
+                        travelDirection = Direction.Down;
                         wallDirection = Direction.Right;
                     }
-                    break;
-                case Direction.TopRight:
-                    break;
-                case Direction.BottomRight:
-                    break;
-                case Direction.BottomLeft:
-                    break;
-                case Direction.TopLeft:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(travelDirection), travelDirection, null);
