@@ -31,6 +31,8 @@ namespace Theseus
                 return maze.MazeImage; // No start pixel found
             }
 
+            var solutionImage = new Bitmap(maze.MazeImage);
+
             // Move up from start pixel until wall reached
             var currPixel = startPixel;
             var nextPixel = maze.GetPixelTop(currPixel);
@@ -44,7 +46,7 @@ namespace Theseus
                     return maze.MazeImage;
                 }
 
-                maze.SetPixel(currPixel, maze.SolutionColor);
+                solutionImage.SetPixel(currPixel.X, currPixel.Y, maze.SolutionColor);
             }
 
             var travelDirection = Direction.Right;
@@ -52,7 +54,7 @@ namespace Theseus
 
             while (!currPixel.IsColor(maze.FinishColor))
             {
-                maze.SetPixel(currPixel, maze.SolutionColor);
+                solutionImage.SetPixel(currPixel.X, currPixel.Y, maze.SolutionColor);
                 var nextStep = FollowWall(maze, currPixel, travelDirection, wallDirection);
                 currPixel = nextStep.Item1;
                 travelDirection = nextStep.Item2;
@@ -64,7 +66,7 @@ namespace Theseus
                 }
             }
 
-            return maze.MazeImage;
+            return solutionImage;
         }
 
         private static GraphicalMazePixel FindStartPixel(GraphicalMaze maze)
