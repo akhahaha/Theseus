@@ -42,7 +42,7 @@ namespace Theseus
                 var graphicalMaze = GraphicalMaze.Create(sourceImage, WallColor, StartColor, FinishColor,
                     SolutionColor);
                 // Generate solution image
-                var graphicalMazeSolver = GraphicalMazeSolverFactory.GetSolver(SolverType.WallFollower);
+                var graphicalMazeSolver = GraphicalMazeSolverFactory.GetSolver(SolverType.ShortestPath);
                 var solutionImage = graphicalMazeSolver.GenerateSolution(graphicalMaze);
 
                 // Write solution image, creating the directory if necessary

@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Theseus
 {
@@ -78,17 +80,19 @@ namespace Theseus
             return GetPixel(point.X - 1, point.Y);
         }
 
-        public void SetPixel(int x, int y, Color color)
+        public List<GraphicalMazePixel> GetNeighbors(Point point)
         {
-            if (0 <= x && x < MazeImage.Width && 0 <= y && y < MazeImage.Height)
+            var neighbors = new List<GraphicalMazePixel>();
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
             {
-                MazeImage.SetPixel(x, y, color);
+                var neighbor = GetPixel(point, direction);
+                if (neighbor != null)
+                {
+                    neighbors.Add(neighbor);
+                }
             }
-        }
 
-        public void SetPixel(Point point, Color color)
-        {
-            SetPixel(point.X, point.Y, color);
+            return neighbors;
         }
 
         public Color WallColor { get; }

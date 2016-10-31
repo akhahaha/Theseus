@@ -4,7 +4,7 @@ namespace Theseus
 {
     public enum SolverType
     {
-        WallFollower
+        ShortestPath, WallFollower
     }
 
     public static class GraphicalMazeSolverFactory
@@ -13,6 +13,8 @@ namespace Theseus
         {
             switch (algorithmType)
             {
+                case SolverType.ShortestPath:
+                    return ShortestPathGraphicalMazeSolver.Create();
                 case SolverType.WallFollower:
                     return WallFollowerGraphicalMazeSolver.Create();
                 default:

@@ -1,6 +1,8 @@
-﻿namespace Theseus
+﻿using System;
+
+namespace Theseus
 {
-    public class Point
+    public class Point : IEquatable<Point>
     {
         public static Point Create(int x, int y)
         {
@@ -16,5 +18,25 @@
         public int X { get; }
 
         public int Y { get; }
+
+        public bool Equals(Point other)
+        {
+            return other != null && X == other.X && Y == other.Y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((Point) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (X * 397) ^ Y;
+            }
+        }
     }
 }

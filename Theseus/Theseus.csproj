@@ -40,6 +40,7 @@
         <Reference Include="System.Drawing"/>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ShortestPathGraphicalMazeSolver.cs"/>
         <Compile Include="Direction.cs"/>
         <Compile Include="GraphicalMaze.cs"/>
         <Compile Include="GraphicalMazePixel.cs"/>
@@ -54,11 +55,4 @@
         <None Include="App.config"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-               Other similar extension points exist, see Microsoft.Common.targets.
-          <Target Name="BeforeBuild">
-          </Target>
-          <Target Name="AfterBuild">
-          </Target>
-          -->
 </Project>
