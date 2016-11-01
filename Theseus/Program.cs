@@ -1,79 +1,106 @@
 ﻿using System;
-using System.Drawing;
-using System.IO;
+using System.Collections.Generic;
 
 namespace Theseus
 {
     public class Program
     {
-        private const string Usage = "Usage: theseus.exe sourceImageFile.[bmp/png/jpg] outputImageFile.[bmp/png/jpg]";
-        private static readonly Color StartColor = Color.FromName("Red");
-        private static readonly Color FinishColor = Color.FromName("Blue");
-        private static readonly Color WallColor = Color.FromName("Black");
-        private static readonly Color SolutionColor = Color.FromName("Green");
+        private const string ProgramName = "theseus";
+        private const string Version = "1.0.0";
+
+        private static readonly Dictionary<string, ISubcommand> Subcommands = new Dictionary<string, ISubcommand>()
+        {
+            {"help", new Help()},
+            {"solve", Solve.GetInstance()},
+            {"clean", Clean.GetInstance()}
+        };
 
         public static void Main(string[] args)
         {
-            if (args.Length == 1 && (args[0] == "-h" || args[0] == "--help"))
+            if (args.Length == 0)
             {
-                Console.WriteLine(Usage);
-                Exit();
+                Console.WriteLine(GetProgramDescription());
+                Exit(0);
+                return;
             }
 
-            // Validate arguments
-            if (args.Length != 2)
+            // Determine subcommand
+            var subcommandName = args[0];
+            var subcommand = GetSubcommand(subcommandName);
+            if (subcommand == null)
             {
-                Console.Error.WriteLine("Incorrect number of arguments found.");
-                Console.Error.WriteLine(Usage);
-                Exit();
+                Console.Error.WriteLine("Subcommand '" + subcommandName + "' not recognized.");
+                Exit(-1);
+                return;
             }
 
-            // Process arguments
-            var currentDirectory = Directory.GetCurrentDirectory();
-            var sourceFile = Path.Combine(currentDirectory, args[0]);
-            var outputFile = Path.Combine(currentDirectory, args[1]);
+            var subcommandArgs = new string[args.Length - 1];
+            Array.Copy(args, 1, subcommandArgs, 0, subcommandArgs.Length);
+            subcommand.Execute(subcommandArgs);
 
-            // TODO: Validate file formats
-
-            // Get source image
-            try
-            {
-                var sourceImage = Image.FromFile(sourceFile);
-                var graphicalMaze = GraphicalMaze.Create(sourceImage, WallColor, StartColor, FinishColor,
-                    SolutionColor);
-                // Generate solution image
-                var graphicalMazeSolver = GraphicalMazeSolverFactory.GetSolver(SolverType.ShortestPath);
-                var solutionImage = graphicalMazeSolver.GenerateSolution(graphicalMaze);
-
-                // Write solution image, creating the directory if necessary
-                var ouputDirectory = Path.GetDirectoryName(outputFile);
-                if (ouputDirectory != null)
-                {
-                    Directory.CreateDirectory(ouputDirectory);
-                    solutionImage.Save(outputFile);
-                }
-                else
-                {
-                    Console.Error.WriteLine("Cannot retrieve directoy information for output file path ("
-                                            + outputFile + ".");
-                    Exit();
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                Console.Error.WriteLine("Source image not found (" + sourceFile + ").");
-                Exit();
-            }
-
-            // Solution generated successfully
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                Console.WriteLine("Solution generated and saved (" + outputFile + ".");
-            }
-            Exit();
+            Exit(0);
         }
 
-        private static void Exit()
+        private static string GetProgramDescription()
+        {
+            return ProgramName + " v" + Version;
+        }
+
+        private class Help : ISubcommand
+        {
+            private const string Description = "Shows help information.";
+            private const string Usage = "help [subcommand]";
+
+            public string GetDescription()
+            {
+                return Description;
+            }
+
+            public string GetUsage()
+            {
+                return Usage;
+            }
+
+            public void Execute(string[] args)
+            {
+                if (args.Length == 0)
+                {
+                    Console.WriteLine(GetProgramDescription());
+                    Console.WriteLine();
+                    Console.WriteLine("Available commands:");
+                    foreach (var entry in Subcommands)
+                    {
+                        Console.WriteLine("\t" + entry.Key + "\t\t" + entry.Value.GetDescription());
+                    }
+
+                    Exit(0);
+                    return;
+                }
+
+                var subcommandName = args[0];
+                var subcommand = GetSubcommand(subcommandName);
+                if (subcommand == null)
+                {
+                    Console.Error.WriteLine("Subcommand '" + subcommandName + "' not recognized.");
+                    Exit(-1);
+                    return;
+                }
+
+                Console.WriteLine(subcommandName);
+                Console.WriteLine(subcommand.GetDescription());
+                Console.WriteLine();
+                Console.WriteLine("Usage: " + subcommand.GetUsage());
+
+                Exit(0);
+            }
+        }
+
+        private static ISubcommand GetSubcommand(string name)
+        {
+            return Subcommands.ContainsKey(name) ? Subcommands[name] : null;
+        }
+
+        private static void Exit(int exitCode)
         {
             // Freeze console output
             if (System.Diagnostics.Debugger.IsAttached)
@@ -82,7 +109,7 @@ namespace Theseus
                 Console.Read();
             }
 
-            Environment.Exit(0); // TODO: Define exit codes
+            Environment.Exit(exitCode);
         }
     }
 }
