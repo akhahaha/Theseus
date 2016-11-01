@@ -41,19 +41,18 @@ namespace Theseus
 
             if (startPoint == null || endPoint == null)
             {
-                return maze.MazeImage; // No start or end points found
+                return null; // No start or end points found
             }
 
             // Run best first search
             var path = BestFirstSearch(maze, startPoint, endPoint);
 
-            // No solution found
-            if (path == null) return maze.MazeImage;
+            if (path == null) return null; // No solution found
 
             var solutionImage = new Bitmap(maze.MazeImage);
             foreach (var point in path) solutionImage.SetPixel(point.X, point.Y, maze.SolutionColor);
 
-            solutionImage.SetPixel(startPoint.X, startPoint.Y, maze.StartColor); // Reset start pixel
+            solutionImage.SetPixel(startPoint.X, startPoint.Y, maze.StartColor); // Reapply start pixel color
             return solutionImage;
         }
 

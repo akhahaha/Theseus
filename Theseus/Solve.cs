@@ -62,6 +62,13 @@ namespace Theseus
                 var graphicalMazeSolver = GraphicalMazeSolverFactory.GetSolver(SolverType.ShortestPath);
                 var solutionImage = graphicalMazeSolver.GenerateSolution(graphicalMaze);
 
+                if (solutionImage == null)
+                {
+                    Console.Error.WriteLine("No solution found for maze using this algorithm.");
+                    Exit(-1);
+                    return;
+                }
+
                 // Write solution image, creating the directory if necessary
                 var ouputDirectory = Path.GetDirectoryName(outputFile);
                 if (ouputDirectory != null)

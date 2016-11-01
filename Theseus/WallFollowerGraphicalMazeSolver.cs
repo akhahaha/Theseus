@@ -63,7 +63,7 @@ namespace Theseus
 
                 if (currPixel.Equals(startWallPixel))
                 {
-                    return maze.MazeImage; // No solution found
+                    return null; // No solution found if looped around to the first wall pixel
                 }
             }
 
