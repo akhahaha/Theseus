@@ -5,8 +5,8 @@ namespace Theseus
 {
     /// <summary>
     /// Graphical maze solver implementing a left-handed "wall follower" maze solution algorithm.
-    /// This solver is capable of generating a single solution for any "simply connected" maze where all walls are
-    /// connected together or to the outer walls.
+    /// This solver is capable of generating a single solution for any "simply connected" maze where all walls and the
+    /// finish point are connected together or to the outer walls.
     /// The solution is not guaranteed to be optimal.
     /// </summary>
     public class WallFollowerGraphicalMazeSolver : IGraphicalMazeSolver
@@ -43,29 +43,31 @@ namespace Theseus
 
                 if (nextPixel.IsColor(maze.FinishColor))
                 {
-                    return maze.MazeImage;
+                    return solutionImage;
                 }
 
                 solutionImage.SetPixel(currPixel.X, currPixel.Y, maze.SolutionColor);
             }
 
+            var startWallPixel = currPixel;
             var travelDirection = Direction.Right;
             var wallDirection = Direction.Up;
 
             while (!currPixel.IsColor(maze.FinishColor))
             {
-                solutionImage.SetPixel(currPixel.X, currPixel.Y, maze.SolutionColor);
                 var nextStep = FollowWall(maze, currPixel, travelDirection, wallDirection);
+                solutionImage.SetPixel(currPixel.X, currPixel.Y, maze.SolutionColor);
                 currPixel = nextStep.Item1;
                 travelDirection = nextStep.Item2;
                 wallDirection = nextStep.Item3;
 
-                if (currPixel.IsColor(maze.FinishColor) && currPixel.X == startPixel.X && currPixel.Y == startPixel.Y)
+                if (currPixel.Equals(startWallPixel))
                 {
                     return maze.MazeImage; // No solution found
                 }
             }
 
+            solutionImage.SetPixel(startPixel.X, startPixel.Y, maze.StartColor); // Reapply start pixel color
             return solutionImage;
         }
 
